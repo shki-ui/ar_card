@@ -3,24 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AR Debug</title>
+  <title>AR Открытка</title>
   <script src="./aframe.min.js"></script>
   <script src="./mindar-image-aframe.prod.js"></script>
   <style>
     body { margin: 0; overflow: hidden; }
-    #debug {
-      position: fixed; top: 10px; left: 10px; z-index: 9999;
-      background: rgba(0,0,0,0.75); color: #0f0; padding: 8px 12px;
-      font-family: monospace; font-size: 13px; border-radius: 6px;
-      pointer-events: none; max-width: 90vw;
-    }
   </style>
 </head>
 <body>
-  <div id="debug">Запуск сцены...</div>
-
   <a-scene
-    mindar-image="imageTargetSrc: ./targets.mind;"
+    mindar-image="imageTargetSrc: ./targets.mind; filterMinCF: 0.0001; filterBeta: 0.001;"
     color-space="sRGB"
     renderer="colorManagement: true;"
     vr-mode-ui="enabled: false"
@@ -29,29 +21,14 @@
     <a-light type="ambient" intensity="1.5"></a-light>
     <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-    <a-entity id="target" mindar-image-target="targetIndex: 0">
-      <a-box color="red" position="0 0 0" scale="0.2 0.2 0.2"></a-box>
+    <a-entity mindar-image-target="targetIndex: 0">
       <a-entity
-        id="model"
         gltf-model="url(./snowman.glb)"
         position="0 0 0"
-        rotation="0 0 0"
+        rotation="90 0 0"
         scale="0.5 0.5 0.5"
       ></a-entity>
     </a-entity>
   </a-scene>
-
-  <script>
-    const log = (msg) => {
-      document.getElementById('debug').innerHTML += '<br>' + msg;
-    };
-    const model = document.getElementById('model');
-    const target = document.getElementById('target');
-
-    model.addEventListener('model-loaded', () => log('OK: модель snowman.glb загружена'));
-    model.addEventListener('model-error', (e) => log('ОШИБКА модели: ' + JSON.stringify(e.detail)));
-    target.addEventListener('targetFound', () => log('OK: маркер НАЙДЕН'));
-    target.addEventListener('targetLost', () => log('Маркер потерян'));
-  </script>
 </body>
 </html>
